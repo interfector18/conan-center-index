@@ -74,6 +74,13 @@ class BenchmarkConan(ConanFile):
             "set(CMAKE_CXX_STANDARD",
             "#"
         )
+        # Prevent -pedantic-errors from breaking builds with newer Clang
+        # that flags __COUNTER__ as a C2y extension (-Werror,-Wc2y-extensions)
+        replace_in_file(self,
+            os.path.join(self.source_folder, "CMakeLists.txt"),
+            "add_cxx_compiler_flag(-pedantic-errors)",
+            "# add_cxx_compiler_flag(-pedantic-errors)",
+        )
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)

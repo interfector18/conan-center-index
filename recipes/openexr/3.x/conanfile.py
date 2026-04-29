@@ -58,6 +58,10 @@ class OpenEXRConan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
+        # GCC 15 defaults to C23. OpenEXR's internal thread shim defines
+        # once_flag/call_once symbols that clash with C23 declarations.
+        if self.settings.compiler == "gcc" and Version(self.settings.compiler.version) >= "15":
+            tc.extra_cflags.append("-std=gnu17")
         tc.variables["OPENEXR_INSTALL_EXAMPLES"] = False
         tc.variables["BUILD_TESTING"] = False
         tc.variables["BUILD_WEBSITE"] = False

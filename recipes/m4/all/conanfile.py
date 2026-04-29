@@ -45,6 +45,8 @@ class M4Conan(ConanFile):
         env.generate()
 
         tc = AutotoolsToolchain(self)
+        # m4 1.4.19's gnulib uses C constructs incompatible with C23 default in GCC 15+
+        tc.extra_cflags.append("-std=gnu17")
         if is_msvc(self):
             tc.extra_cflags.append("-FS")
             # Avoid a `Assertion Failed Dialog Box` during configure with build_type=Debug
