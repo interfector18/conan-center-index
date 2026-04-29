@@ -18,6 +18,9 @@ sources:
       x86_64:
         url: "https://cmake.org/files/v4.4/cmake-4.4.3-windows-x86_64.zip"
         sha256: "4d52ebab7193a698651639ed80d8d04fd903358843572cf44c7fd234cb7c26ab"
+    source:
+      url: "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3.tar.gz"
+      sha256: "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0"
   "3.31.12":
     Linux:
       armv8:
@@ -37,3 +40,6 @@ sources:
       x86_64:
         url: "https://cmake.org/files/v3.31/cmake-3.31.12-windows-x86_64.zip"
         sha256: "0c4baa40f28b3f8225eb3fdf6946c987b4fe901403b4eaf2fbbd9378100aaa0c"
+    source:
+      url: "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12.tar.gz"
+      sha256: "5f3fd5a54dfa65602bdbed64f981a72673cc19f2d304cc2955cf0dfa0cfd8272"

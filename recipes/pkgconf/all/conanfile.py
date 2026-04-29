@@ -58,6 +58,7 @@ class PkgConfConan(ConanFile):
 
     def build_requirements(self):
         self.tool_requires("meson/[>=1.2.2 <2]")
+        self.tool_requires("ninja/[>=1.10.2 <2]")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
