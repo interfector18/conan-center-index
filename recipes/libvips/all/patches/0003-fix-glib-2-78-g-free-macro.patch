@@ -1,0 +1,13 @@
+diff --git a/libvips/include/vips/memory.h b/libvips/include/vips/memory.h
+index b9a4f1f..c7d2a68 100644
+--- a/libvips/include/vips/memory.h
++++ b/libvips/include/vips/memory.h
+@@ -41,7 +41,7 @@ extern "C" {
+ 	G_STMT_START \
+ 	{ \
+ 		if (S) { \
+-			(void) F((S)); \
++			F((S)); \
+ 			(S) = 0; \
+ 		} \
+ 	} \
