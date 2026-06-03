@@ -67,6 +67,8 @@ class CTranslate2Conan(ConanFile):
     def requirements(self):
         # Unbundled from third_party/ (submodules absent in tarball)
         self.requires("spdlog/[>=1.9 <2]")
+        if self.settings.compiler in ("clang", "apple-clang"):
+            self.requires("llvm-openmp/20.1.6")
         if self.settings.arch in ("x86", "x86_64"):
             self.requires("cpu_features/[>=0.9]")
 

@@ -85,8 +85,9 @@ class ElfutilsConan(ConanFile):
         self.build_requires("m4/1.4.19")
         self.build_requires("flex/2.6.4")
         self.tool_requires("bison/3.8.2")
-        if not self.conf.get("tools.gnu:pkg_config", default=False, check_type=str):
-            self.tool_requires("pkgconf/[>=2.2 <3]")
+        # autoreconf needs pkg.m4 for PKG_CHECK_MODULES even when an external
+        # pkg-config executable is configured.
+        self.tool_requires("pkgconf/[>=2.2 <3]")
         if self._settings_build.os == "Windows":
             self.win_bash = True
             if not self.conf.get("tools.microsoft.bash:path", check_type=str):
