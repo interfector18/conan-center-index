@@ -83,11 +83,15 @@ class CMakeConan(ConanFile):
             bootstrap_cmake_options.append("-DCMAKE_USE_OPENSSL=OFF")
         save(self, "bootstrap_args", json.dumps({"options": " ".join(bootstrap_cmake_options)}))
 
+    @property
+    def _unzipped_folder(self):
+        return os.path.join(self.build_folder, "unzipped")
+
     def build(self):
         if self._is_binary_available:
             arch = str(self.settings.arch) if self.settings.os != "Macos" else "universal"
             get(self, **self.conan_data["sources"][self.version][str(self.settings.os)][arch],
-                destination=self.source_folder, strip_root=True)
+                destination=self._unzipped_folder, strip_root=True)
         else:
             get(self, **self.conan_data["sources"][self.version]["source"],
                 destination=self.source_folder, strip_root=True)
@@ -105,17 +109,20 @@ class CMakeConan(ConanFile):
 
     def package(self):
         if self._is_binary_available:
-            copy(self, "*", src=self.build_folder, dst=self.package_folder)
+            copy(self, "*", src=self._unzipped_folder, dst=self.package_folder)
 
             if self.settings.os == "Macos":
-                docs_folder = os.path.join(self.build_folder, "CMake.app", "Contents", "doc", "cmake")
+                docs_folder = os.path.join(self._unzipped_folder, "CMake.app", "Contents", "doc", "cmake")
             else:
-                docs_folder = os.path.join(self.build_folder, "doc", "cmake")
+                docs_folder = os.path.join(self._unzipped_folder, "doc", "cmake")
 
             licensefile = "LICENSE.rst" if Version(self.version) >= "4.0.0" else "Copyright.txt"
             copy(self, licensefile, src=docs_folder, dst=os.path.join(self.package_folder, "licenses"), keep_path=False)
 
             if self.settings.os != "Macos":
+                # Remove unneeded folders (also cause long paths on Windows)
+                # Note: on macOS we don't want to modify the bundle contents
+                #       to preserve signature validation
                 rmdir(self, os.path.join(self.package_folder, "doc"))
                 rmdir(self, os.path.join(self.package_folder, "man"))
         else:
