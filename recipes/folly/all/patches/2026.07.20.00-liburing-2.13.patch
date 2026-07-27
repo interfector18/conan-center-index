@@ -1,0 +1,66 @@
+diff --git a/folly/io/async/IoUringZeroCopyBufferPool.cpp b/folly/io/async/IoUringZeroCopyBufferPool.cpp
+index e9c1eb3..7c2a775 100644
+--- a/folly/io/async/IoUringZeroCopyBufferPool.cpp
++++ b/folly/io/async/IoUringZeroCopyBufferPool.cpp
+@@ -29,0 +30,52 @@
++// Folly tracks the io_uring zero-copy receive UAPI ahead of liburing 2.13.
++// Remove these compatibility definitions when Conan Center provides a
++// liburing release containing IORING_REGISTER_ZCRX_CTRL.
++constexpr unsigned int IORING_REGISTER_ZCRX_CTRL = 36;
++
++enum {
++  IO_URING_QUERY_ZCRX = 1,
++};
++
++struct io_uring_query_zcrx {
++  uint64_t register_flags;
++  uint64_t area_flags;
++  uint32_t nr_ctrl_opcodes;
++  uint32_t features;
++  uint32_t rq_hdr_size;
++  uint32_t rq_hdr_alignment;
++  uint64_t __resv2;
++};
++
++enum zcrx_reg_flags {
++  ZCRX_REG_IMPORT = 1,
++};
++
++enum zcrx_features {
++  ZCRX_FEATURE_RX_PAGE_SIZE = 1 << 0,
++};
++
++enum zcrx_ctrl_op {
++  ZCRX_CTRL_FLUSH_RQ,
++  ZCRX_CTRL_EXPORT,
++};
++
++struct zcrx_ctrl_flush_rq {
++  uint64_t __resv[6];
++};
++
++struct zcrx_ctrl_export {
++  uint32_t zcrx_fd;
++  uint32_t __resv1[11];
++};
++
++struct zcrx_ctrl {
++  uint32_t zcrx_id;
++  uint32_t op;
++  uint64_t __resv[2];
++
++  union {
++    struct zcrx_ctrl_export zc_export;
++    struct zcrx_ctrl_flush_rq zc_flush;
++  };
++};
++
+@@ -448 +500 @@ IoUringZeroCopyBufferPoolImpl::IoUringZeroCopyBufferPoolImpl(
+-    ifqReg.rx_buf_len = bufferSize_;
++    ifqReg.__resv2 = bufferSize_;
+@@ -455 +507 @@ IoUringZeroCopyBufferPoolImpl::IoUringZeroCopyBufferPoolImpl(
+-        << ifqReg.rx_buf_len << ", falling back to default page size";
++        << ifqReg.__resv2 << ", falling back to default page size";
+@@ -462 +514 @@ IoUringZeroCopyBufferPoolImpl::IoUringZeroCopyBufferPoolImpl(
+-    ifqReg.rx_buf_len = 0;
++    ifqReg.__resv2 = 0;

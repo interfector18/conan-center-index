@@ -1,4 +1,12 @@
 sources:
+  "2026.07.20.00":
+    url: "https://github.com/facebook/folly/releases/download/v2026.07.20.00/folly-v2026.07.20.00.tar.gz"
+    sha256: "55bc9959a787d91395501368beb893558cda528069f83cc78126cb9527d1a6d3"
   "2024.08.12.00":
     url: "https://github.com/facebook/folly/releases/download/v2024.08.12.00/folly-v2024.08.12.00.tar.gz"
     sha256: "18d7be721721db547cb9c5dd5cc50df05cd88b0a8e683e3126ec6f9ce2c41c4d"
+patches:
+  "2026.07.20.00":
+    - patch_file: "patches/2026.07.20.00-liburing-2.13.patch"
+      patch_description: "Provide the post-2.13 liburing ZCRX declarations used by Folly"
+      patch_type: "portability"
