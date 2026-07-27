@@ -691,6 +691,9 @@ class OpenSSLConan(ConanFile):
             if not self.options.no_threads:
                 self.cpp_info.components["crypto"].system_libs.append("pthread")
                 self.cpp_info.components["ssl"].system_libs.append("pthread")
+        elif self.settings.os == "FreeBSD" and not self.options.no_threads:
+            self.cpp_info.components["crypto"].system_libs.append("pthread")
+            self.cpp_info.components["ssl"].system_libs.append("pthread")
         elif self.settings.os == "Neutrino":
             self.cpp_info.components["crypto"].system_libs.append("atomic")
             self.cpp_info.components["ssl"].system_libs.append("atomic")
