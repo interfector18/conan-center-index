@@ -73,7 +73,9 @@ class CMakeConan(ConanFile):
         tc = AutotoolsDeps(self)
         tc.generate()
         bootstrap_cmake_options = ["--"]
-        cppstd = self.settings.get_safe("compiler.cppstd") or "11"
+        cppstd = str(self.settings.get_safe("compiler.cppstd") or "11")
+        if cppstd.startswith("gnu"):
+            cppstd = cppstd[3:]
         bootstrap_cmake_options.append(f"-DCMAKE_CXX_STANDARD={cppstd}")
         bootstrap_cmake_options.append("-DCMAKE_USE_SYSTEM_ZLIB=ON")
         if self.options.get_safe("with_openssl", default=False):
