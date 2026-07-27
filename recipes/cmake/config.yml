@@ -5,3 +5,5 @@ versions:
     folder: "binary"
   "3.31.12":
     folder: "binary"
+  "3.31.9":
+    folder: "binary"
