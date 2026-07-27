@@ -3,7 +3,7 @@ import os
 from conan import ConanFile
 from conan.tools.build import check_min_cppstd
 from conan.tools.cmake import cmake_layout, CMakeToolchain, CMakeDeps, CMake
-from conan.tools.files import copy, get, rm
+from conan.tools.files import apply_conandata_patches, copy, export_conandata_patches, get, rm
 from conan.tools.scm import Version
 from conan.tools.microsoft import is_msvc
 
@@ -50,6 +50,9 @@ class DrogonConan(ConanFile):
         "with_redis": False,
     }
 
+    def export_sources(self):
+        export_conandata_patches(self)
+
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
@@ -72,7 +75,10 @@ class DrogonConan(ConanFile):
         check_min_cppstd(self, 17)
 
     def requirements(self):
-        self.requires("trantor/[>=1.5.25 <2]", transitive_headers=True, transitive_libs=True)
+        if Version(self.version) == "1.9.11":
+            self.requires("trantor/[>=1.5.21 <2]", transitive_headers=True, transitive_libs=True)
+        else:
+            self.requires("trantor/[>=1.5.25 <2]", transitive_headers=True, transitive_libs=True)
         self.requires("jsoncpp/1.9.5", transitive_headers=True, transitive_libs=True)
         self.requires("openssl/[>=1.1 <4]")
         self.requires("zlib/[>=1.2.11 <2]")
@@ -85,7 +91,10 @@ class DrogonConan(ConanFile):
         if self.options.with_brotli:
             self.requires("brotli/1.1.0")
         if self.options.get_safe("with_postgres"):
-            self.requires("libpq/[>=15.4 <18]")
+            if Version(self.version) == "1.9.11":
+                self.requires("libpq/15.4")
+            else:
+                self.requires("libpq/[>=15.4 <18]")
         if self.options.get_safe("with_mysql"):
             self.requires("mariadb-connector-c/3.4.3")
         if self.options.get_safe("with_sqlite"):
@@ -141,6 +150,7 @@ class DrogonConan(ConanFile):
         deps.generate()
 
     def build(self):
+        apply_conandata_patches(self)
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
