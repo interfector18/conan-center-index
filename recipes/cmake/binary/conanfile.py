@@ -64,6 +64,8 @@ class CMakeConan(ConanFile):
                 check_min_cppstd(self, minimal_cpp_standard)
 
     def generate(self):
+        if self.settings.os == "FreeBSD" and not self.conf.get("tools.gnu:make_program"):
+            self.conf.define("tools.gnu:make_program", "gmake")
         if self._is_binary_available:
             return
         tc = AutotoolsToolchain(self)
