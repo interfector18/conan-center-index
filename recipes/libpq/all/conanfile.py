@@ -88,6 +88,8 @@ class LibpqConan(ConanFile):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
 
     def generate(self):
+        if self.settings.os == "FreeBSD" and not self.conf.get("tools.gnu:make_program"):
+            self.conf.define("tools.gnu:make_program", "gmake")
         env = VirtualBuildEnv(self)
         env.generate()
         if is_msvc(self):
