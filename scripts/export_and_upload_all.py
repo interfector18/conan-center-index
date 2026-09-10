@@ -14,7 +14,7 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LOGFILE = REPO_ROOT / "scripts" / "export.log"
 REMOTE_NAME = "patchwork"
-REMOTE_URL = "https://conan.chess.one/artifactory/api/conan/conan"
+REMOTE_URL = "https://conan.conan-hdc2h2x0up.eu/artifactory/api/conan/conan"
 MAX_WORKERS = os.cpu_count() or 4
 
 

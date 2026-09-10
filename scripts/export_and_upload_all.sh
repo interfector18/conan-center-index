@@ -97,7 +97,7 @@ fi
 
 # Set up remote if needed and upload
 REMOTE_NAME="patchwork"
-REMOTE_URL="https://conan.chess.one/artifactory/api/conan/conan"
+REMOTE_URL="https://conan.conan-hdc2h2x0up.eu/artifactory/api/conan/conan"
 
 if conan remote list | grep -q "^${REMOTE_NAME}:"; then
   log "Remote '${REMOTE_NAME}' already configured"
