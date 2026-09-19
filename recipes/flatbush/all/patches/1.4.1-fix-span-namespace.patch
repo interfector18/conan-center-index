@@ -1,0 +1,16 @@
+--- a/flatbush.h
++++ b/flatbush.h
+@@ -86,9 +86,12 @@
+ #endif
+ #endif
+ 
++#ifndef FLATBUSH_SPAN
++#include <span>
++#endif
++
+ namespace flatbush {
+ #ifndef FLATBUSH_SPAN
+-#include <span>
+ using std::span;
+ #else
+ template <typename Type>
