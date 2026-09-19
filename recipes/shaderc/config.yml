@@ -2,8 +2,8 @@ versions:
   "2025.3":
     folder: all
   "2024.1":
-    folder: all
+    folder: pre_2025.3
   "2023.6":
-    folder: all
+    folder: pre_2025.3
   "2021.1":
-    folder: all
+    folder: pre_2025.3
