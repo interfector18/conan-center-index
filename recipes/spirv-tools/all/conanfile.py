@@ -59,7 +59,11 @@ class SpirvtoolsConan(ConanFile):
 
     def build_requirements(self):
         if Version(self.version) >= "1.3.239":
-            self.tool_requires("cmake/[>=3.17.2]")
+            # Retain the CMake upper bound for versions no longer validated upstream.
+            if Version(self.version) >= "1.4.313.0" or Version(self.version) < "1.3.261.1":
+                self.tool_requires("cmake/[>=3.17.2]")
+            else:
+                self.tool_requires("cmake/[>=3.17.2 <4]")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
@@ -194,3 +198,6 @@ class SpirvtoolsConan(ConanFile):
             self.cpp_info.components["spirv-tools-diff"].set_property("cmake_target_name", "SPIRV-Tools-diff")
             self.cpp_info.components["spirv-tools-diff"].libs = ["SPIRV-Tools-diff"]
             self.cpp_info.components["spirv-tools-diff"].requires = ["spirv-tools-core", "spirv-tools-opt"]
+
+        if Version(self.version) < "1.3" and not self.options.shared:
+            del self.cpp_info.components["spirv-tools-diff"]

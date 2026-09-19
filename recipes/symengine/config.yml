@@ -1,3 +1,19 @@
 versions:
   "0.15.0":
     folder: all
+  "0.8.1":
+    folder: pre_0.15.0
+  "0.9.0":
+    folder: pre_0.15.0
+  "0.10.1":
+    folder: pre_0.15.0
+  "0.11.1":
+    folder: pre_0.15.0
+  "0.11.2":
+    folder: pre_0.15.0
+  "0.12.0":
+    folder: pre_0.15.0
+  "0.13.0":
+    folder: pre_0.15.0
+  "0.14.0":
+    folder: pre_0.15.0

@@ -28,6 +28,9 @@ sources:
           - "https://cmake.org/files/v4.4/cmake-4.4.3-windows-x86_64.zip"
           - "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3-windows-x86_64.zip"
         sha256: "4d52ebab7193a698651639ed80d8d04fd903358843572cf44c7fd234cb7c26ab"
+    source:
+      url: "https://github.com/Kitware/CMake/releases/download/v4.4.3/cmake-4.4.3.tar.gz"
+      sha256: "c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0"
   "3.31.12":
     Linux:
       armv8:
@@ -57,3 +60,28 @@ sources:
           - "https://cmake.org/files/v3.31/cmake-3.31.12-windows-x86_64.zip"
           - "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-windows-x86_64.zip"
         sha256: "0c4baa40f28b3f8225eb3fdf6946c987b4fe901403b4eaf2fbbd9378100aaa0c"
+    source:
+      url: "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12.tar.gz"
+      sha256: "5f3fd5a54dfa65602bdbed64f981a72673cc19f2d304cc2955cf0dfa0cfd8272"
+  "3.31.9":
+    Linux:
+      armv8:
+        url: "https://cmake.org/files/v3.31/cmake-3.31.9-linux-aarch64.tar.gz"
+        sha256: "09b7127b09e3d3ed5fa894f4e59f6a01112f267da6acc4249e46dba97b14afcb"
+      x86_64:
+        url: "https://cmake.org/files/v3.31/cmake-3.31.9-linux-x86_64.tar.gz"
+        sha256: "312d78e0b7c5c9b4a97a87a46c3e525aa84895fe8135c238c4616bba73dc9518"
+    Macos:
+      universal:
+        url: "https://cmake.org/files/v3.31/cmake-3.31.9-macos10.10-universal.tar.gz"
+        sha256: "709726f0c10c5b5255e9eeee2ac586cdaf7595b0070c7f35def15b1a38fa0c95"
+    Windows:
+      armv8:
+        url: "https://cmake.org/files/v3.31/cmake-3.31.9-windows-arm64.zip"
+        sha256: "45b319a85083cedb4e9e0ecc38c2747cdfde19954e645fd2137370e03c4b333a"
+      x86_64:
+        url: "https://cmake.org/files/v3.31/cmake-3.31.9-windows-x86_64.zip"
+        sha256: "dc16867d0c0ffb35026976aff119335d5b47def44e76ae82ffafdc1f98b3d59d"
+    source:
+      url: "https://github.com/Kitware/CMake/releases/download/v3.31.9/cmake-3.31.9.tar.gz"
+      sha256: "5d4fdec04247ca8a8e8f63692f0d0f1e9d6d082a2bdd008dff8ab3ba7215aa83"

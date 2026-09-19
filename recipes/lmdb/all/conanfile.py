@@ -76,6 +76,6 @@ class lmdbConan(ConanFile):
 
         if self.settings.os in ["Linux", "FreeBSD"]:
             self.cpp_info.system_libs = ["pthread"]
-            # Since 1.0 the crypto module loader (module.c) requires dlopen()
-            if Version(self.version) >= "1.0.0":
+            # Since 1.0 the crypto module loader requires dlopen(); FreeBSD provides it in libc.
+            if self.settings.os == "Linux" and Version(self.version) >= "1.0.0":
                 self.cpp_info.system_libs.append("dl")

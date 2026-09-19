@@ -28,6 +28,10 @@ class MesonConan(ConanFile):
             # https://github.com/mesonbuild/meson/blob/b6b634ad33e5ca9ad4a9d6139dba4244847cc0e8/mesonbuild/backend/ninjabackend.py#L625
             self.requires("ninja/[>=1.10.2 <2]")
 
+    def build_requirements(self):
+        if self.conf.get("tools.meson.mesontoolchain:backend", default="ninja", check_type=str) == "ninja":
+            self.tool_requires("ninja/[>=1.10.2 <2]")
+
     def package_id(self):
         self.info.clear()
 
@@ -76,6 +80,8 @@ class MesonConan(ConanFile):
 
         self.cpp_info.includedirs = []
         self.cpp_info.libdirs = []
+        self.buildenv_info.prepend_path("PATH", meson_root)
+        self.runenv_info.prepend_path("PATH", meson_root)
 
         if Version(conan_version).major < 2:
             self.env_info.PATH.append(meson_root)

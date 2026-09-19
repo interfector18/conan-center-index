@@ -48,6 +48,9 @@ class YASMConan(ConanFile):
         env.generate()
 
         tc = AutotoolsToolchain(self)
+        # yasm 1.3.0 sources use C identifiers that clash with C23 keywords
+        # under modern GCC defaults (e.g. GCC 15+ defaults).
+        tc.extra_cflags.append("-std=gnu17")
         enable_debug = "yes" if self.settings.build_type == "Debug" else "no"
         tc.configure_args.extend([
             f"--enable-debug={enable_debug}",

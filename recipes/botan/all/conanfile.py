@@ -285,6 +285,7 @@ class BotanConan(ConanFile):
             return 'mingw'
         return {'Windows': 'windows',
                 'Linux': 'linux',
+                'FreeBSD': 'freebsd',
                 'Macos': 'darwin',
                 'Android': 'android',
                 'Emscripten': 'emscripten',

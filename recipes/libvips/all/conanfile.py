@@ -297,10 +297,12 @@ class LibvipsConan(ConanFile):
     def _patch_sources(self):
         apply_conandata_patches(self)
 
-        # Disable tests
+        # Disable tests and CLI tools. The tools are not needed by consumers and
+        # can pull in undeclared system-only dependencies when linking static.
         meson_build = os.path.join(self.source_folder, "meson.build")
         replace_in_file(self, meson_build, "subdir('test')", "")
         replace_in_file(self, meson_build, "subdir('fuzz')", "")
+        replace_in_file(self, meson_build, "subdir('tools')", "")
 
         # workaround https://github.com/conan-io/conan/issues/14213
         replace_in_file(self, meson_build,
