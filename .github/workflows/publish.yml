@@ -6,18 +6,45 @@ on:
       - master
     paths:
       - 'recipes/**'
+      - '.github/workflows/publish.yml'
+      - 'scripts/select_recipes.py'
+      - 'scripts/verify_recipe_publication.py'
+      - 'scripts/test_recipe_publication.py'
+  pull_request:
+    paths:
+      - '.github/workflows/publish.yml'
+      - 'scripts/select_recipes.py'
+      - 'scripts/verify_recipe_publication.py'
+      - 'scripts/test_recipe_publication.py'
   workflow_dispatch:
     inputs:
       recipe:
         description: 'Specific recipe to publish (e.g. drogon), or leave empty for all changed'
         required: false
 
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: recipe-publication-${{ github.event_name == 'pull_request' && github.ref || 'remote' }}
+  cancel-in-progress: false
+
 env:
   CONAN_REMOTE_NAME: chess-one
 
 jobs:
+  validate:
+    name: Test publication logic
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest discover -s scripts -p 'test_recipe_publication.py' -v
+
   publish:
     name: Export & Upload Recipes
+    if: github.event_name != 'pull_request'
+    needs: validate
     runs-on: ubuntu-24.04
 
     steps:
@@ -44,17 +71,17 @@ jobs:
 
       - name: Detect changed recipes
         id: detect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_RECIPE: ${{ inputs.recipe }}
         run: |
-          if [[ -n "${{ github.event.inputs.recipe }}" ]]; then
-            echo "${{ github.event.inputs.recipe }}" > /tmp/changed_recipes.txt
-          else
-            git remote add upstream https://github.com/conan-io/conan-center-index.git 2>/dev/null || true
-            git fetch upstream master
-
-            git diff --name-only upstream/master -- recipes/ \
-              | grep -oP '^recipes/\K[^/]+' \
-              | sort -u > /tmp/changed_recipes.txt || true
-          fi
+          gh api --paginate --slurp \
+            "repos/${GITHUB_REPOSITORY}/actions/workflows/publish.yml/runs?status=success&event=push&per_page=100" \
+            > /tmp/publication-history.json
+          python3 scripts/select_recipes.py \
+            --history /tmp/publication-history.json \
+            --run-id "$GITHUB_RUN_ID" --branch "$GITHUB_REF_NAME" \
+            --recipe "$REQUESTED_RECIPE" > /tmp/changed_recipes.txt
 
           if [[ ! -s /tmp/changed_recipes.txt ]]; then
             echo "No changed recipes found"
@@ -98,22 +125,30 @@ jobs:
               continue
             fi
 
+            : > /tmp/exported-revisions.txt
             for entry in $VERSIONS; do
               VERSION="${entry%%:*}"
               FOLDER="${entry##*:}"
               RECIPE_PATH="${RECIPE_DIR}/${FOLDER}"
 
               echo "=== Exporting ${RECIPE}/${VERSION} from ${RECIPE_PATH} ==="
-              if ! conan export "${RECIPE_PATH}" --name="${RECIPE}" --version="${VERSION}"; then
+              if ! conan export "${RECIPE_PATH}" --name="${RECIPE}" --version="${VERSION}" \
+                --format=json > /tmp/exported-recipe.json; then
                 echo "::error::Failed to export ${RECIPE}/${VERSION}"
                 FAILED+=("${RECIPE}/${VERSION}")
                 continue
               fi
+              python3 -c 'import json; print(json.load(open("/tmp/exported-recipe.json"))["reference"])' \
+                >> /tmp/exported-revisions.txt
             done
 
             echo "=== Uploading ${RECIPE} recipes ==="
             conan upload "${RECIPE}/*" --remote ${{ env.CONAN_REMOTE_NAME }} --confirm --only-recipe || {
               echo "::error::Failed to upload ${RECIPE}"
+              FAILED+=("${RECIPE}")
+            }
+            python3 scripts/verify_recipe_publication.py "$CONAN_REMOTE_NAME" /tmp/exported-revisions.txt || {
+              echo "::error::Remote verification failed for ${RECIPE}"
               FAILED+=("${RECIPE}")
             }
           done < /tmp/changed_recipes.txt
