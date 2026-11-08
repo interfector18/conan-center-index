@@ -124,6 +124,13 @@ class LibheifConan(ConanFile):
             tc.cache_variables["CMAKE_POLICY_VERSION_MINIMUM"] = "3.5"
         # Disable finding possible Doxygen in system, so no docs are built
         tc.cache_variables["CMAKE_DISABLE_FIND_PACKAGE_Doxygen"] = True
+        if Version(self.version) >= "1.23":
+            # heifio (an internal helper, not installed) is always configured and
+            # optionally picks up image libraries; keep host system copies out
+            for pkg in ("TIFF", "PNG", "WEBP"):
+                tc.cache_variables[f"CMAKE_DISABLE_FIND_PACKAGE_{pkg}"] = True
+            if not self.options.get_safe("with_jpeg", False):
+                tc.cache_variables["CMAKE_DISABLE_FIND_PACKAGE_JPEG"] = True
         tc.cache_variables["CMAKE_COMPILE_WARNING_AS_ERROR"] = False
         tc.generate()
         deps = CMakeDeps(self)
