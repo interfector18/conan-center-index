@@ -1,7 +1,9 @@
 versions:
+  "1.9.14":
+    folder: "all"
   "1.9.14-pw.1":
-    folder: "all"
+    folder: "pre_1.9.14"
   "1.9.13":
-    folder: "all"
+    folder: "pre_1.9.14"
   "1.9.11":
-    folder: "all"
+    folder: "pre_1.9.14"

@@ -1,21 +1,23 @@
 versions:
+  "58.2":
+    folder: all
   "52.0":
-    folder: all
+    folder: pre_58.2
   "50.1":
-    folder: all
+    folder: pre_58.2
   "48.1":
-    folder: all
+    folder: pre_58.2
   "47.0":
-    folder: all
+    folder: pre_58.2
   "45.0":
-    folder: all
+    folder: pre_58.2
   "44.0":
-    folder: all
+    folder: pre_58.2
   "43.1":
-    folder: all
+    folder: pre_58.2
   "42.0":
-    folder: all
+    folder: pre_58.2
   "41.0":
-    folder: all
+    folder: pre_58.2
   "40.0":
-    folder: all
+    folder: pre_58.2

@@ -3,7 +3,7 @@ versions:
     folder: all
   "1.24.0":
     folder: all
-  "1.22.0":
-    folder: all
   "1.21.0":
     folder: all
+  "1.22.0":
+    folder: pre_1.26.0

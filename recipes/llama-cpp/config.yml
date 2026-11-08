@@ -1,3 +1,5 @@
 versions:
-  "b6565":
+  "0.6.0":
     folder: "all"
+  "b6565":
+    folder: "pre_0.6.0"

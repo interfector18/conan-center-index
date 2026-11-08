@@ -1,11 +1,13 @@
 versions:
-  "2.4.0":
+  "2.4.1":
     folder: all
   "2.3.0":
     folder: all
+  "2.4.0":
+    folder: pre_2.4.1
   "2.2.0":
-    folder: all
+    folder: pre_2.4.1
   "2.1.0":
-    folder: all
+    folder: pre_2.4.1
   "2.0.0":
-    folder: all
+    folder: pre_2.4.1

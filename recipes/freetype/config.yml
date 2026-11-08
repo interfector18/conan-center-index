@@ -1,15 +1,17 @@
 versions:
+  "2.15.0":
+    folder: meson
   "2.14.3":
-    folder: meson
-  "2.14.1":
-    folder: meson
-  "2.13.3":
     folder: meson
   "2.13.2":
     folder: meson
+  "2.14.1":
+    folder: pre_2.15.0
+  "2.13.3":
+    folder: pre_2.15.0
   "2.12.1":
-    folder: all
+    folder: pre_2.15.0_2
   "2.11.1":
-    folder: all
+    folder: pre_2.15.0_2
   "2.10.4":
-    folder: all
+    folder: pre_2.15.0_2

@@ -2,14 +2,14 @@ import os
 
 from conan import ConanFile
 from conan.tools.build import build_jobs, check_min_cppstd
-from conan.tools.files import chdir, copy, get, rmdir, save, load
+from conan.tools.files import chdir, copy, get, rmdir, save, load, trim_conandata
 from conan.tools.gnu import Autotools, AutotoolsToolchain, AutotoolsDeps
 from conan.tools.scm import Version
 from conan.errors import ConanInvalidConfiguration
 
 import json
 
-required_conan_version = ">=2"
+required_conan_version = ">=2.2"
 
 class CMakeConan(ConanFile):
     name = "cmake"
@@ -90,6 +90,11 @@ class CMakeConan(ConanFile):
     @property
     def _unzipped_folder(self):
         return os.path.join(self.build_folder, "unzipped")
+
+    def export(self):
+        # this will ensure locally-exported recipes match the recipe revision from
+        # the Conan Center remote
+        trim_conandata(self)
         
     def build(self):
         if self._is_binary_available:

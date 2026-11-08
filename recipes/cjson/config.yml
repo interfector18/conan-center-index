@@ -1,17 +1,17 @@
 versions:
   "1.7.19":
     folder: all
-  "1.7.18":
-    folder: all
-  "1.7.17":
-    folder: all
   "1.7.16":
     folder: all
+  "1.7.18":
+    folder: pre_1.7.19
+  "1.7.17":
+    folder: pre_1.7.19
   "1.7.15":
-    folder: all
+    folder: pre_1.7.19
   "1.7.14":
-    folder: all
+    folder: pre_1.7.19
   "1.7.13":
-    folder: all
+    folder: pre_1.7.19
   "1.7.12":
-    folder: all
+    folder: pre_1.7.19

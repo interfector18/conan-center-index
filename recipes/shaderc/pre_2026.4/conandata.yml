@@ -1,0 +1,9 @@
+sources:
+  "2025.3":
+    url: "https://github.com/google/shaderc/archive/refs/tags/v2025.3.tar.gz"
+    sha256: "a8e4a25e5c2686fd36981e527ed05e451fcfc226bddf350f4e76181371190937"
+patches:
+  "2025.3":
+    - patch_file: "patches/2025.3/use-conan-dependencies.patch"
+    - patch_file: "patches/2025.3/adapt-update_build_version.py.patch"
+    - patch_file: "patches/2025.3/install-shaderc_util.patch"

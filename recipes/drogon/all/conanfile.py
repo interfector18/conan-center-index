@@ -1,6 +1,7 @@
 import os
 
 from conan import ConanFile
+from conan.errors import ConanInvalidConfiguration
 from conan.tools.build import check_min_cppstd
 from conan.tools.cmake import cmake_layout, CMakeToolchain, CMakeDeps, CMake
 from conan.tools.files import apply_conandata_patches, copy, export_conandata_patches, get, rm
@@ -33,6 +34,7 @@ class DrogonConan(ConanFile):
         "with_mysql": [True, False],
         "with_sqlite": [True, False],
         "with_redis": [True, False],
+        "with_spdlog": [True, False],
     }
     default_options = {
         "shared": False,
@@ -48,6 +50,7 @@ class DrogonConan(ConanFile):
         "with_mysql": False,
         "with_sqlite": False,
         "with_redis": False,
+        "with_spdlog": False,
     }
 
     def export_sources(self):
@@ -61,6 +64,8 @@ class DrogonConan(ConanFile):
         if self.options.shared:
             self.options.rm_safe("fPIC")
             self.options["trantor"].shared = True
+        if self.options.with_spdlog:
+            self.options["trantor"].with_spdlog = True
         if not self.options.with_orm:
             del self.options.with_postgres
             del self.options.with_postgres_batch
@@ -73,6 +78,8 @@ class DrogonConan(ConanFile):
 
     def validate(self):
         check_min_cppstd(self, 17)
+        if self.options.with_spdlog and not self.dependencies["trantor"].options.with_spdlog:
+            raise ConanInvalidConfiguration(f"{self.ref} with_spdlog=True requires trantor/*:with_spdlog=True")
 
     def requirements(self):
         if Version(self.version) == "1.9.11":
@@ -89,7 +96,7 @@ class DrogonConan(ConanFile):
         if self.options.with_boost:
             self.requires("boost/1.83.0", transitive_headers=True)
         if self.options.with_brotli:
-            self.requires("brotli/1.1.0")
+            self.requires("brotli/[>=1.1.1 <2]")
         if self.options.get_safe("with_postgres"):
             if Version(self.version) == "1.9.11":
                 self.requires("libpq/15.4")
@@ -103,9 +110,12 @@ class DrogonConan(ConanFile):
             self.requires("hiredis/1.2.0")
         if self.options.get_safe("with_yaml_cpp", False):
             self.requires("yaml-cpp/0.8.0")
+        if self.options.with_spdlog:
+            self.requires("spdlog/[>=1.13 <2]")
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version], strip_root=True)
+        apply_conandata_patches(self)
 
     def layout(self):
         cmake_layout(self, src_folder="src")
@@ -130,6 +140,7 @@ class DrogonConan(ConanFile):
         if is_msvc(self):
             tc.cache_variables["CMAKE_CXX_FLAGS"] = "/Zc:__cplusplus /EHsc"
         tc.cache_variables["USE_SUBMODULE"] = False
+        tc.cache_variables["USE_SPDLOG"] = self.options.with_spdlog
         tc.generate()
         deps = CMakeDeps(self)
         if self.options.get_safe("with_mysql"):
@@ -145,8 +156,6 @@ class DrogonConan(ConanFile):
             deps.set_property("hiredis", "cmake_target_name", "Hiredis_lib")
         if self.options.get_safe("with_yaml_cpp"):
             deps.set_property("yaml-cpp", "cmake_additional_variables_prefixes", ["YAML_CPP"])
-        deps.set_property("jsoncpp", "cmake_file_name", "JsonCpp")
-        deps.set_property("jsoncpp", "cmake_target_name", "Jsoncpp_lib")
         deps.generate()
 
     def build(self):

@@ -1,5 +1,7 @@
 versions:
+  "8.23.0":
+    folder: all
   "8.22.0":
-    folder: all
+    folder: pre_8.23.0
   "8.21.0":
-    folder: all
+    folder: pre_8.23.0

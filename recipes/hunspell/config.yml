@@ -1,5 +1,7 @@
 versions:
+  "1.7.5":
+    folder: all
   "1.7.2":
     folder: all
   "1.7.0":
-    folder: all
+    folder: pre_1.7.5

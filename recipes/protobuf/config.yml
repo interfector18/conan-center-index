@@ -1,5 +1,7 @@
 versions:
-  "7.35.0":
+  "7.36.2":
+    folder: all
+  "7.35.1":
     folder: all
   "6.33.5":
     folder: all
@@ -7,3 +9,5 @@ versions:
     folder: all
   "3.21.12":
     folder: 3.x
+  "7.35.0":
+    folder: all

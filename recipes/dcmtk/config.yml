@@ -1,5 +1,7 @@
 versions:
-  "3.7.0":
+  "3.7.1":
     folder: "all"
   "3.6.7":
     folder: "all"
+  "3.7.0":
+    folder: "pre_3.7.1"

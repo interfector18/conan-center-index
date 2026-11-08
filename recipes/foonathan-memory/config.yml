@@ -2,8 +2,8 @@ versions:
   "0.7.3":
     folder: all
   "0.7.2":
-    folder: all
+    folder: pre_0.7.3
   "0.7.1":
-    folder: all
+    folder: pre_0.7.3
   "0.7.0":
-    folder: all
+    folder: pre_0.7.3
