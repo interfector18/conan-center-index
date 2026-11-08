@@ -131,6 +131,13 @@ jobs:
               FOLDER="${entry##*:}"
               RECIPE_PATH="${RECIPE_DIR}/${FOLDER}"
 
+              # Conan 1-only recipes kept for history cannot be exported by Conan 2
+              # (scripts/export_and_upload_all.sh skips them the same way).
+              if grep -qE '^\s*from conans import' "${RECIPE_PATH}/conanfile.py"; then
+                echo "::warning::Skipping Conan 1 recipe ${RECIPE}/${VERSION}"
+                continue
+              fi
+
               echo "=== Exporting ${RECIPE}/${VERSION} from ${RECIPE_PATH} ==="
               if ! conan export "${RECIPE_PATH}" --name="${RECIPE}" --version="${VERSION}" \
                 --format=json > /tmp/exported-recipe.json; then
