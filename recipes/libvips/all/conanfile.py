@@ -143,7 +143,10 @@ class LibvipsConan(ConanFile):
         if self.options.with_fontconfig:
             self.requires("fontconfig/[>=2.15.0 <3]")
         if self.options.with_heif:
-            self.requires("libheif/1.16.2")
+            if Version(self.version) >= "8.17":
+                self.requires("libheif/[>=1.23.4 <2]")
+            else:
+                self.requires("libheif/1.16.2")
         if self.options.get_safe("with_highway"):
             self.requires("highway/1.0.7")
         if self.options.with_jpeg == "libjpeg":
@@ -241,8 +244,15 @@ class LibvipsConan(ConanFile):
         tc.project_options["deprecated"] = true_false(self.options.deprecated)
         tc.project_options["examples"] = "false"
         tc.project_options["cplusplus"] = true_false(self.options.cpp)
-        tc.project_options["doxygen"] = "false"
-        tc.project_options["gtk_doc"] = "false"
+        if Version(self.version) >= "8.17":
+            tc.project_options["cpp-docs"] = "false"
+            tc.project_options["docs"] = "false"
+            # New optional loaders; keep them off so system libraries are never picked up
+            tc.project_options["uhdr"] = "disabled"
+            tc.project_options["raw"] = "disabled"
+        else:
+            tc.project_options["doxygen"] = "false"
+            tc.project_options["gtk_doc"] = "false"
         tc.project_options["modules"] = "disabled"
         tc.project_options["introspection"] = enabled_disabled(self.options.introspection)
         tc.project_options["vapi"] = true_false(self.options.vapi)
