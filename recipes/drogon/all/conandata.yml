@@ -1,4 +1,9 @@
 sources:
+  # 1.9.14 plus upstream master through 553b7f32 and the Transaction commit API
+  # (interfector18/drogon feat/transaction-commit).
+  "1.9.14.1":
+    url: "https://github.com/interfector18/drogon/archive/3dc8824944614573c54f7455a6cecbf975b78c30.tar.gz"
+    sha256: "7128dec17776dc12580bd87944b1afe1523149fa19b6d511c7b0e3e45279a92b"
   "1.9.14":
     url: "https://github.com/drogonframework/drogon/archive/v1.9.14.tar.gz"
     sha256: "3831bfae74eb6b47965a424e5c9d593d5efa31e9f7e6a5e02d4754039facff5e"
